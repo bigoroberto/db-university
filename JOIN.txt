@@ -1,0 +1,78 @@
+1. Selezionare tutti gli studenti iscritti al Corso di Laurea in Economia
+
+SELECT `students`.`name`,`students`.`surname`, `degrees`.`name` AS `Corso_di_Laurea`
+FROM `degrees`
+JOIN `students` ON `degrees`.`id` = `students`.`degree_id`
+WHERE `degrees`.`name` = "Corso di Laurea in Economia";
+
+
+2. Selezionare tutti i Corsi di Laurea del Dipartimento di Neuroscienze
+
+SELECT `degrees`.`name`,`departments`.`name`
+FROM `departments`
+JOIN `degrees` ON `departments`.`id`= `degrees`.`department_id`
+WHERE `departments`.`name` = "Dipartimento di Neuroscienze";
+
+
+3. Selezionare tutti i corsi in cui insegna Fulvio Amato (id=44)
+
+SELECT `teachers`.`name`,`teachers`.`surname`,`courses`.`name` AS `nome_corso`
+FROM `teachers`
+JOIN `course_teacher` ON `teachers`.`id` = `course_teacher`.`teacher_id`
+JOIN `courses` ON `course_teacher`.`course_id` = `courses`.`id` 
+WHERE `teachers`.`name` = "Fulvio"
+AND `teachers`.`surname` = "Amato";
+
+
+4. Selezionare tutti gli studenti con i dati relativi al corso di laurea a cui sono iscritti e il
+relativo dipartimento, in ordine alfabetico per cognome e nome
+
+SELECT
+`students`.`surname`,`students`.name,
+`degrees`.`name` AS `nome_corso` ,`degrees`.`level`,
+`departments`.`name` AS `nome_dipartimento`
+FROM `departments` 
+JOIN `degrees` ON `departments`.`id` = `degrees`.`department_id`
+JOIN `students` ON `degrees`.`id`= `students`.`degree_id`
+ORDER BY `students`.`surname`,`students`.`name`;
+
+
+5. Selezionare tutti i corsi di laurea con i relativi corsi e insegnanti
+
+SELECT  
+`degrees`.`name`AS `nome_corso_di_Laurea`,
+`courses`.`name` AS `nome_corso`,
+`teachers`.`name`,`teachers`.`surname`
+FROM `teachers`
+JOIN `course_teacher` ON `teachers`.`id` = `course_teacher`.`teacher_id`
+JOIN `courses` ON `course_teacher`.`course_id` = `courses`.`id`
+JOIN `degrees`ON `courses`.`degree_id` = `degrees`.`id`;
+
+
+6. Selezionare tutti i docenti che insegnano nel Dipartimento di Matematica (54)
+
+SELECT  
+`teachers`.`name`,`teachers`.`surname`,
+`departments`.`name` AS `nome_dipartimento`
+FROM `teachers`
+JOIN `course_teacher` ON `teachers`.`id` = `course_teacher`.`teacher_id`
+JOIN `courses` ON `course_teacher`.`course_id` = `courses`.`id`
+JOIN `degrees`ON `courses`.`degree_id` = `degrees`.`id`
+JOIN `departments` ON `degrees`.`id` = `degrees`.`department_id`
+WHERE `departments`.`name` = "Dipartimento di Matematica";
+
+
+7. Selezionare per ogni studente quanti tentativi ha fatto per superare ciascuno dei suoi
+esami
+
+SELECT `students`.`name`,`students`.`surname`, 
+COUNT(`exams`.`id`) AS `numero_tentativi_esame` 
+FROM `students` 
+JOIN `exam_student` ON `students`.`id` = `exam_student`.`student_id` 
+JOIN `exams` ON `exam_student`.`exam_id` = `exams`.`id` 
+GROUP BY `students`.`id`;
+
+
+
+8. BONUS: Quali esami mancano a Ursula Benedetti per laurearsi (matricola n.
+624567)?
